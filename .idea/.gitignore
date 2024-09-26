@@ -4,6 +4,7 @@
 /modules.xml
 /vcs.xml
 /php.xml
+/prettier.xml
 *.iml
 # Editor-based HTTP Client requests
 /httpRequests/
@@ -12,3 +13,4 @@
 /dataSources.local.xml
 /codeStyles/
 /inspectionProfiles/
+
