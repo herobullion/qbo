@@ -1,3 +1,5 @@
+import { LinkedTxn } from "./linked-txn";
+
 export interface PurchaseOrderQboData {
   Id?: string,
   SyncToken?: string,
@@ -36,12 +38,7 @@ export interface PurchaseOrderQboData {
     value: string,
     name: string
   },
-  LinkedTxn?: [
-    {
-      TxnId: string,
-      TxnType: string
-    }
-  ],
+  LinkedTxn?: LinkedTxn[],
   Line?: PurchaseOrderLineQboData[],
   VendorRef?: {
     value: string,

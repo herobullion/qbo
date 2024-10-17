@@ -1,3 +1,5 @@
+import { LinkedTxn, LineLinkedTxn } from "./linked-txn";
+
 export interface BillQboData {
   Id?: string,
   SyncToken?: string,
@@ -12,12 +14,7 @@ export interface BillQboData {
   },
 
   Line?: BillLineQboData[],
-  LinkedTxn?: [
-    {
-      TxnId: string,
-      TxnType: string
-    }
-  ]
+  LinkedTxn?: LinkedTxn[]
 }
 
 export interface BillLineQboData {
@@ -32,11 +29,5 @@ export interface BillLineQboData {
     UnitPrice: number,
     Qty: number
   },
-  LinkedTxn: [
-    {
-      TxnType: string,
-      TxnId: string,
-      TxnLineId: string
-    }
-  ]
+  LinkedTxn: LineLinkedTxn[]
 }
