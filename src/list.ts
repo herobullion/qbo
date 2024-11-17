@@ -27,10 +27,8 @@ export const combine = <T extends QBOQueryableEntityType>(
     maxResults: second.QueryResponse.maxResults,
     startPosition: second.QueryResponse.startPosition,
     [Entity]: [
-      // @ts-ignore
-      ...first.QueryResponse[Entity],
-      // @ts-ignore
-      ...second.QueryResponse[Entity]
+      ...(getEntityData(Entity, first.QueryResponse) ?? []),
+      ...(getEntityData(Entity, second.QueryResponse) ?? [])
     ]
   }
 } as FetchListResponse<T>);
@@ -108,12 +106,23 @@ interface FetchListQuery<T extends QBOQueryableEntityType> {
   fetchFn: typeof fetch
 }
 
+export type QueryResponseJustEntity<T extends QBOQueryableEntityType> = {
+  [K in T as SnakeToCamelCase<K> extends SnakeToCamelCase<T> ? SnakeToCamelCase<T> : never]: GetQBOQueryableEntityType<T>[]
+};
+
+const getEntityData = <T extends QBOQueryableEntityType>(
+  Entity: SnakeToCamelCase<T>,
+  data: QueryResponseJustEntity<T>
+): GetQBOQueryableEntityType<T>[] | undefined => {
+  const entityData = data[Entity];
+  return entityData as GetQBOQueryableEntityType<T>[];
+};
 
 export type FetchListResponse<T extends QBOQueryableEntityType> = {
   time: number,
-  QueryResponse: {
-    [K in T as SnakeToCamelCase<K> extends SnakeToCamelCase<T> ? SnakeToCamelCase<T> : never]: GetQBOQueryableEntityType<T>[]
-  } & {
+  QueryResponse:
+  & QueryResponseJustEntity<T>
+  & {
     startPosition: number,
     maxResults: number
   },
@@ -138,7 +147,7 @@ export const fetchListQuery = async <T extends QBOQueryableEntityType>({
     }
   });
   if (makeRequestError) {
-    throw makeRequestError;
+    return err(makeRequestError);
   }
 
   const {
@@ -153,8 +162,7 @@ export const fetchListQuery = async <T extends QBOQueryableEntityType>({
     return err(error);
   }
 
-  // @ts-ignore
-  if (!opts.fetch_all || data.QueryResponse[Entity]?.length !== opts.limit) {
+  if (!opts.fetch_all || getEntityData(Entity, data.QueryResponse)?.length !== opts.limit) {
     return ok(data);
   } else {
     return ok(combine(
@@ -164,8 +172,7 @@ export const fetchListQuery = async <T extends QBOQueryableEntityType>({
         config,
         opts: {
           ...opts,
-          // @ts-ignore
-          offset: opts.offset + data.QueryResponse[Entity]?.length
+          offset: opts.offset + (getEntityData(Entity, data.QueryResponse)?.length ?? 0)
         },
         Entity,
         headers,
@@ -232,8 +239,7 @@ export const list = ({
   }
 
   return ok({
-    // @ts-ignore
-    entities: data?.QueryResponse[Entity] ?? [],
+    entities: getEntityData(Entity, data?.QueryResponse) ?? [],
     time: data.time,
     intuitTid: data.intuitTid
   });
