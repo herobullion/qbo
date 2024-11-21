@@ -8,17 +8,16 @@ export interface BillQboData {
     LastUpdatedTime?: string
   },
   DocNumber?: string,
-  VendorRef?: {
+  VendorRef: {
     value: string,
     name?: string
   },
-
-  Line?: BillLineQboData[],
+  Line: BillLineQboData[],
   LinkedTxn?: LinkedTxn[]
 }
 
 export interface BillLineQboData {
-  Amount?: number,
+  Amount: number,
   Description?: string,
   DetailType?: "ItemBasedExpenseLineDetail",
   ItemBasedExpenseLineDetail: {

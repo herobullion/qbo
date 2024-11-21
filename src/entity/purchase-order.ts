@@ -39,12 +39,12 @@ export interface PurchaseOrderQboData {
     name: string
   },
   LinkedTxn?: LinkedTxn[],
-  Line?: PurchaseOrderLineQboData[],
-  VendorRef?: {
+  Line: PurchaseOrderLineQboData[],
+  VendorRef: {
     value: string,
     name?: string
   },
-  APAccountRef?: {
+  APAccountRef: {
     value: string,
     name?: string
   },
