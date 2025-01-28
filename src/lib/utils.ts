@@ -73,7 +73,7 @@ export const makeRequestURL = withResult(<T extends object>({
 }: MakeRequestURL<T>): URL =>
   new URL(`${config.V3_ENDPOINT_BASE_URL}${config.REALM_ID}${path}${makeQueryParams({
     ...(query_params ?? {}),
-    minorversion: 70
+    minorversion: 75
   })}`));
 
 export const title = <T extends string>(str: T): Capitalize<T> =>
