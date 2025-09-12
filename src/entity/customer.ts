@@ -70,7 +70,6 @@ export interface CustomerQboData {
     name?: string;
   };
   IsProject?: boolean;
-  Source?: string;
   PrimaryTaxIdentifier?: string;
   GSTRegistrationType?: string;
   PrintOnCheckName?: string;
